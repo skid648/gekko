@@ -1,21 +1,21 @@
 <template lang='pug'>
-div
-  .mx1
-    label(for='exchange').wrapper Exchange:
-    .custom-select.button
-      select(v-model='exchange')
-        option(v-for='(market, e) in exchanges') {{ e }}
-  .grd-row
-    .grd-row-col-3-6.mx1
-      label(for='currency') Currency:
+  div
+    .mx1
+      label(for='exchange').wrapper Exchange:
       .custom-select.button
-        select(v-model='currency')
-          option(v-for='cur in currencies') {{ cur }}
-    .grd-row-col-3-6.mx1
-      label(for='asset') Asset:
-      .custom-select.button
-        select(v-model='asset')
-          option(v-for='asst in assets') {{ asst }}
+        select(v-model='exchange')
+          option(v-for='(market, e) in exchanges') {{ e }}
+    .grd-row
+      .grd-row-col-3-6.mx1
+        label(for='currency') Currency:
+        .custom-select.button
+          select(v-model='currency')
+            option(v-for='cur in currencies') {{ cur }}
+      .grd-row-col-3-6.mx1
+        label(for='asset') Asset:
+        .custom-select.button
+          select(v-model='asset')
+            option(v-for='asst in assets') {{ asst }}
 </template>
 
 <script>
@@ -63,15 +63,28 @@ export default {
       return exchanges;
     },
     markets: function() {
-      return this.exchanges ? this.exchanges[ this.exchange ] : null;
+      if (this.exchange == null) return null
+      if (this.exchanges == null) return null
+      if (this.exchanges[this.exchange] == null) return null
+      return this.exchanges[ this.exchange ]
     },
 
     assets: function() {
-      return this.exchanges ? this.exchanges[this.exchange].markets[this.currency] : null;
+      if (this.exchange == null) return null
+      if (this.currency == null) return null
+      if (this.exchanges == null) return null
+      if (this.exchanges[this.exchange] == null) return null
+      if (this.exchanges[this.exchange].markets === null) return null
+      if (this.exchanges[this.exchange].markets[this.currency] === null) return null
+      return this.exchanges[this.exchange].markets[this.currency]
     },
 
     currencies: function() {
-      return this.exchanges ? _.keys( this.exchanges[this.exchange].markets ) : null;
+      if (this.exchange == null) return null
+      if (this.exchanges == null) return null
+      if (this.exchanges[this.exchange] == null) return null
+      if (this.exchanges[this.exchange].markets === null) return null
+      return _.keys( this.exchanges[this.exchange].markets )
     },
     watchConfig: function() {
       return {
@@ -100,3 +113,4 @@ export default {
 }
 </script>
 </style>
+
