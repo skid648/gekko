@@ -13,7 +13,12 @@ module.exports = function(config, done) {
   util.setConfig(config);
 
   var adapter = config[config.adapter];
+
+  // console.log(`Retrieving ${config.adapter} adapter`, adapter)
+
   var scan = require(dirs.gekko + adapter.path + '/scanner');
+
+  // console.log(`Creating scan from ${dirs.gekko + adapter.path + '/scanner'}`, scan)
 
   scan((err, markets) => {
 
@@ -24,7 +29,6 @@ module.exports = function(config, done) {
       if(numCPUCores === undefined)
          numCPUCores = 1;
       async.eachLimit(markets, numCPUCores, (market, next) => {
-
       let marketConfig = _.clone(config);
       marketConfig.watch = market;
 
